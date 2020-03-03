@@ -98,25 +98,28 @@ class GoogleScraper extends BrowserWorker {
         }
       }
 
-      let organic_results = document.querySelectorAll('#center_col .g');
+      const foundExact = document.getElementById('topstuff').innerHTML === "";
+      if (foundExact) {
+        let organic_results = document.querySelectorAll('#center_col .g');
 
-      organic_results.forEach((el, index) => {
+        organic_results.forEach((el, index) => {
 
-        let serp_obj = {
-          rank: index + 1,
-          link: _attr(el, '.r a', 'href'),
-          title: _text(el, '.r a h3'),
-          snippet: _text(el, 'span.st'),
-          visible_link: _text(el, '.r cite'),
-          date: _text(el, 'span.f'),
-        };
+          let serp_obj = {
+            rank: index + 1,
+            link: _attr(el, '.r a', 'href'),
+            title: _text(el, '.r a h3'),
+            snippet: _text(el, 'span.st'),
+            visible_link: _text(el, '.r cite'),
+            date: _text(el, 'span.f'),
+          };
 
-        if (serp_obj.date) {
-          serp_obj.date = serp_obj.date.replace(' - ', '');
-        }
+          if (serp_obj.date) {
+            serp_obj.date = serp_obj.date.replace(' - ', '');
+          }
 
-        results.results.push(serp_obj);
-      });
+          results.results.push(serp_obj);
+        });
+      }
 
       // check if no results
       results.no_results = (results.results.length === 0);
